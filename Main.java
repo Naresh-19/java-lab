@@ -1,43 +1,54 @@
 import java.util.*;
+import CIE.*;
+import SEE.*;
 
-class Student {
-    public static int credits(int score) {
-        if (score >= 90) return 10;
-        else if (score >= 80) return 9;
-        else if (score >= 70) return 8;
-        else if (score >= 60) return 7;
-        else if (score >= 50) return 6;
-        else return 0;
-    }
-}
-
-public class Main {
+class FinalMarks {
     public static void main(String[] args) {
+
         Scanner sc = new Scanner(System.in);
-        int credSum = 0;
-        int pointSum = 0;
-        float SGPA;
 
-        System.out.println("Enter name and USN:");
-        String name = sc.nextLine();
-        String USN = sc.nextLine();
+        System.out.print("Enter number of students: ");
+        int n = sc.nextInt();
 
-        System.out.println("Enter number of subjects:");
-        int a = sc.nextInt();
-        int[] cred = new int[a];
-        int[] marks = new int[a];
+        Student s[] = new Student[n];
+        Internals in[] = new Internals[n];
+        External ex[] = new External[n];
 
-        for (int i = 0; i < a; i++) {
-            System.out.println("Enter subject " + (i + 1) + " credits:");
-            cred[i] = sc.nextInt();
-            credSum += cred[i];
+        for (int i = 0; i < n; i++) {
+            System.out.println("\nEnter details of Student " + (i + 1));
 
-            System.out.println("Enter marks obtained:");
-            marks[i] = sc.nextInt();
-            pointSum += Student.credits(marks[i]) * cred[i];
+            System.out.print("USN: ");
+            String usn = sc.next();
+
+            System.out.print("Name: ");
+            String name = sc.next();
+
+            System.out.print("Semester: ");
+            int sem = sc.nextInt();
+
+            int im[] = new int[5];
+            System.out.println("Enter 5 Internal Marks:");
+            for (int j = 0; j < 5; j++) im[j] = sc.nextInt();
+
+            int em[] = new int[5];
+            System.out.println("Enter 5 SEE Marks:");
+            for (int j = 0; j < 5; j++) em[j] = sc.nextInt();
+
+            s[i] = new Student(usn, name, sem);
+            in[i] = new Internals(im);
+            ex[i] = new External(usn, name, sem, em);
         }
 
-        SGPA = (float) pointSum / credSum;
-        System.out.printf("SGPA = %.2f\n", SGPA); // formatted to 2 decimal places
+        System.out.println("\n===== FINAL MARKS OF STUDENTS =====");
+
+        for (int i = 0; i < n; i++) {
+            System.out.println("\nStudent: " + s[i].name + " (" + s[i].usn + ")");
+            for (int j = 0; j < 5; j++) {
+                int finalMarks = in[i].internalMarks[j] + (ex[i].externalMarks[j] / 2);
+                System.out.println("Course " + (j + 1) + ": " + finalMarks);
+            }
+        }
+
+        sc.close();
     }
 }
